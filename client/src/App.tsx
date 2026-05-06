@@ -4,13 +4,16 @@ import NotFound from "@/pages/NotFound";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
-import Home from "./pages/Home";
+import Home from "./pages/HomeEnhanced";
 import Products from "./pages/Products";
 import ProductDetail from "./pages/ProductDetail";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import OrderConfirmation from "./pages/OrderConfirmation";
 import AccountOrders from "./pages/AccountOrders";
+import OrderTracking from "./pages/OrderTracking";
+// Fallback to original Home if needed
+// import Home from "./pages/Home";
 import Admin from "./pages/Admin";
 
 function Router() {
@@ -23,6 +26,7 @@ function Router() {
       <Route path="/checkout" component={Checkout} />
       <Route path="/order-confirmation/:orderId" component={OrderConfirmation} />
       <Route path="/account/orders" component={AccountOrders} />
+      <Route path="/order-tracking/:orderId" component={OrderTracking} />
       <Route path="/admin" component={Admin} />
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />

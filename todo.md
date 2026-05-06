@@ -42,3 +42,13 @@
 - [x] Loading states and empty states
 - [x] Vitest unit tests for key procedures (26 tests passing)
 - [x] Final checkpoint
+
+
+## Phase 7: M-Pesa & Email Enhancements
+- [x] Debug and fix M-Pesa STK Push payment initiation (logging & error handling added)
+- [x] Verify M-Pesa callback confirmation and order status updates (callback handler verified)
+- [x] Add email notification service for order confirmations
+- [x] Add signup welcome email notifications
+- [x] Implement order tracking page with real-time status
+- [ ] Add Google OAuth signup/login option (requires Manus OAuth config)
+- [x] Enhance homepage with promotional banners and featured products

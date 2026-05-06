@@ -36,6 +36,17 @@ import {
   upsertCartItem,
 } from "./db";
 import { initiateStkPush, queryStkStatus } from "./mpesa";
+import { sendOrderConfirmationEmail } from "./emailService";
+
+function formatKES(amount: number | string): string {
+  const num = typeof amount === "string" ? parseFloat(amount) : amount;
+  return new Intl.NumberFormat("en-KE", {
+    style: "currency",
+    currency: "KES",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(num);
+}
 
 // ─── Admin guard ──────────────────────────────────────────────────────────────
 const adminProcedure = protectedProcedure.use(({ ctx, next }) => {
@@ -245,6 +256,28 @@ export const appRouter = router({
         })));
 
         await clearCart(ctx.user.id);
+        
+        // Send order confirmation email
+        const items = await getOrderItems(order.id);
+        await sendOrderConfirmationEmail({
+          orderNumber,
+          customerEmail: ctx.user.email || "customer@sunbox.local",
+          customerName: input.shippingAddress.fullName,
+          totalAmount: formatKES(totalAmount),
+          items: items.map((item) => ({
+            productName: item.productName,
+            quantity: item.quantity,
+            price: formatKES(item.unitPrice),
+          })),
+          shippingAddress: {
+            firstName: input.shippingAddress.fullName.split(" ")[0],
+            lastName: input.shippingAddress.fullName.split(" ").slice(1).join(" "),
+            phone: input.customerPhone,
+            address: input.shippingAddress.address,
+            city: input.shippingAddress.city,
+          },
+        });
+        
         return { orderId: order.id, orderNumber };
       }),
 
